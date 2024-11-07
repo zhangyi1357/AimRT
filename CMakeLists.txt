@@ -172,10 +172,6 @@ if(AIMRT_BUILD_WITH_ROS2)
     cmake_policy(SET CMP0148 OLD)
   endif()
 
-  # fix gflag
-  set(BUILD_TESTING
-      OFF
-      CACHE BOOL "")
   include(GetJsonCpp)
   find_package(rclcpp REQUIRED)
   find_package(Python3 REQUIRED)
