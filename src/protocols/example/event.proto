@@ -9,3 +9,19 @@ message ExampleEventMsg {
   string msg = 1;
   int32 num = 2;
 }
+
+message Transform{
+  double tx = 1;
+  double ty = 2;
+  double tz = 3;
+  double qw = 4;
+  double qx = 5;
+  double qy = 6;
+  double qz = 7;
+  // string child_frame_id = 8;
+}
+
+message MocapData {
+// Header header = 1;
+repeated Transform transforms = 1;
+}

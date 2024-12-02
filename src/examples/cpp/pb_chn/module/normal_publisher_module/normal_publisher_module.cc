@@ -32,7 +32,7 @@ bool NormalPublisherModule::Initialize(aimrt::CoreRef core) {
     publisher_ = core_.GetChannelHandle().GetPublisher(topic_name_);
     AIMRT_CHECK_ERROR_THROW(publisher_, "Get publisher for topic '{}' failed.", topic_name_);
 
-    bool ret = aimrt::channel::RegisterPublishType<aimrt::protocols::example::ExampleEventMsg>(publisher_);
+    bool ret = aimrt::channel::RegisterPublishType<aimrt::protocols::example::MocapData>(publisher_);
     AIMRT_CHECK_ERROR_THROW(ret, "Register publish type failed.");
 
   } catch (const std::exception& e) {
@@ -74,7 +74,7 @@ void NormalPublisherModule::MainLoop() {
   try {
     AIMRT_INFO("Start MainLoop.");
 
-    aimrt::channel::PublisherProxy<aimrt::protocols::example::ExampleEventMsg> publisher_proxy(publisher_);
+    aimrt::channel::PublisherProxy<aimrt::protocols::example::MocapData> publisher_proxy(publisher_);
 
     uint32_t count = 0;
     while (run_flag_) {
@@ -84,9 +84,18 @@ void NormalPublisherModule::MainLoop() {
       AIMRT_INFO("Loop count : {} -------------------------", count);
 
       // publish event
-      aimrt::protocols::example::ExampleEventMsg msg;
-      msg.set_msg("count: " + std::to_string(count));
-      msg.set_num(count);
+      aimrt::protocols::example::MocapData msg;
+      auto transforms = msg.mutable_transforms();
+      for (int i = 0; i < 1000; i++) {
+        auto new_transform = transforms->Add();
+        new_transform->set_tx(i);
+        new_transform->set_ty(i);
+        new_transform->set_tz(i);
+        new_transform->set_qw(i);
+        new_transform->set_qx(i);
+        new_transform->set_qy(i);
+        new_transform->set_qz(i);
+      }
 
       AIMRT_INFO("Publish new pb event, data: {}", aimrt::Pb2CompactJson(msg));
       publisher_proxy.Publish(msg);

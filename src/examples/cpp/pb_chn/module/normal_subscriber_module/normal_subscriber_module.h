@@ -28,7 +28,7 @@ class NormalSubscriberModule : public aimrt::ModuleBase {
   auto GetLogger() { return core_.GetLogger(); }
 
   void EventHandle(aimrt::channel::ContextRef ctx,
-                   const std::shared_ptr<const aimrt::protocols::example::ExampleEventMsg>& data);
+                   const std::shared_ptr<const aimrt::protocols::example::MocapData>& data);
 
  private:
   aimrt::CoreRef core_;
